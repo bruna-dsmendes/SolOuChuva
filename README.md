@@ -1,11 +1,3 @@
-# SolOuChuva
-
-## About
-
-O SolOuChuva é uma aplicação web intuitiva desenvolvida durante o bootcamp da Generation. O projeto foca em aprendizado de web, utilizando inteligência artificial para aplicar conceitos de vibecoding e oferecer uma previsão do tempo descomplicada e com um toque de humor.
-
-## README.md
-
 # SolOuChuva: Seu Guia Meteorológico com Vibecoding
 
 [![Status](https://img.shields.io/badge/Status-Em%20Desenvolvimento-blue?style=for-the-badge)](https://github.com/bruna-dsmendes/SolOuChuva) [![Tecnologia](https://img.shields.io/badge/Tecnologia-JavaScript-yellow?style=for-the-badge&logo=javascript)](https://github.com/bruna-dsmendes/SolOuChuva) [![Bootcamp](https://img.shields.io/badge/Bootcamp-Generation-red?style=for-the-badge)](https://brazil.generation.org/)
