@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-# SolOuChuva
-=======
->>>>>>> ee0ee2c7ecbb624ec071463c238bd3e1310a3c20
-# Criando um README.md mais elaborado e atrativa
+# Criando um README.md mais elaborado e atrativo
 
 <p align="center">
   <img src="https://img.shields.io/badge/Status-Em%20Desenvolvimento-blue?style=for-the-badge" alt="Status">
@@ -38,8 +34,4 @@ Este projeto foi desenvolvido como parte integrante da minha jornada no **bootca
 ## 🚀 Como rodar o projeto?
 1. **Clone este repositório:**
    ```bash
-<<<<<<< HEAD
    git clone [https://github.com/bruna-dsmendes/SolOuChuva.git](https://github.com/bruna-dsmendes/SolOuChuva.git)
-=======
-   git clone [https://github.com/bruna-dsmendes/SolOuChuva.git](https://github.com/bruna-dsmendes/SolOuChuva.git)
->>>>>>> ee0ee2c7ecbb624ec071463c238bd3e1310a3c20
