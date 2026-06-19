@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
+
+  <link rel="icon" type="image/png" href="favicon.png">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="mobile-web-app-capable" content="yes" />
@@ -12,6 +15,7 @@
   <link rel="stylesheet" href="style.css" />
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
 </head>
+
 <body>
 
   <!-- CANVAS DE EFEITOS CLIMÁTICOS (partículas) -->
@@ -39,21 +43,9 @@
     <!-- BUSCA COM AUTOCOMPLETE -->
     <div class="search-wrapper">
       <div class="search-box" id="search-box">
-        <input
-          type="text"
-          id="city-input"
-          placeholder="Ex: Barueri, São Paulo..."
-          autocomplete="off"
-          spellcheck="false"
-          inputmode="text"
-          enterkeyhint="search"
-          aria-label="Nome da cidade"
-          aria-autocomplete="list"
-          aria-controls="autocomplete-list"
-          aria-haspopup="listbox"
-          role="combobox"
-          aria-expanded="false"
-        />
+        <input type="text" id="city-input" placeholder="Ex: Barueri, São Paulo..." autocomplete="off" spellcheck="false"
+          inputmode="text" enterkeyhint="search" aria-label="Nome da cidade" aria-autocomplete="list"
+          aria-controls="autocomplete-list" aria-haspopup="listbox" role="combobox" aria-expanded="false" />
         <!-- Ícone de estado do input (validação visual) -->
         <span class="input-status" id="input-status" aria-hidden="true"></span>
         <button id="search-btn" aria-label="Buscar clima">
@@ -65,12 +57,7 @@
       <p class="input-hint" id="input-hint" aria-live="polite"></p>
 
       <!-- DROPDOWN DE AUTOCOMPLETE -->
-      <ul
-        class="autocomplete-list hidden"
-        id="autocomplete-list"
-        role="listbox"
-        aria-label="Sugestões de cidades"
-      ></ul>
+      <ul class="autocomplete-list hidden" id="autocomplete-list" role="listbox" aria-label="Sugestões de cidades"></ul>
     </div>
 
     <!-- BOTÃO DE GEOLOCALIZAÇÃO -->
@@ -92,7 +79,10 @@
     <!-- LOADING SPINNER -->
     <div class="loading hidden" id="loading">
       <div class="spinner-ring">
-        <div></div><div></div><div></div><div></div>
+        <div></div>
+        <div></div>
+        <div></div>
+        <div></div>
       </div>
       <p class="loading-text" id="loading-text">Buscando dados do clima<span class="dots"></span></p>
     </div>
@@ -200,8 +190,8 @@
       <!-- GRÁFICO DE TEMPERATURA 24h -->
       <div class="section-card" id="chart-section">
         <p class="section-title">🌡️ Temperatura — Próximas 24h</p>
-        <svg id="temp-chart-svg" class="temp-chart" viewBox="0 0 320 90"
-             xmlns="http://www.w3.org/2000/svg" aria-label="Gráfico de temperatura 24h"></svg>
+        <svg id="temp-chart-svg" class="temp-chart" viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg"
+          aria-label="Gráfico de temperatura 24h"></svg>
       </div>
 
       <!-- ARCO NASCER / PÔR DO SOL -->
@@ -210,17 +200,19 @@
         <div class="sun-arc-wrap">
           <svg id="sun-arc-svg" viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg" aria-label="Arco solar">
             <!-- Linha de horizonte -->
-            <line x1="50" y1="100" x2="230" y2="100" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+            <line x1="50" y1="100" x2="230" y2="100" stroke="rgba(255,255,255,.15)" stroke-width="1" />
             <!-- Arco de fundo -->
-            <path d="M 50 100 A 90 90 0 0 1 230 100" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2" stroke-dasharray="4 4"/>
+            <path d="M 50 100 A 90 90 0 0 1 230 100" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2"
+              stroke-dasharray="4 4" />
             <!-- Trilha percorrida -->
-            <path id="sun-trail" fill="none" stroke="#ffb300" stroke-width="2.5" stroke-linecap="round" style="opacity:0; transition: opacity .5s"/>
+            <path id="sun-trail" fill="none" stroke="#ffb300" stroke-width="2.5" stroke-linecap="round"
+              style="opacity:0; transition: opacity .5s" />
             <!-- Arco principal (preenchido pelo JS) -->
-            <path id="sun-arc" fill="none" stroke="rgba(255,220,80,.3)" stroke-width="2"/>
+            <path id="sun-arc" fill="none" stroke="rgba(255,220,80,.3)" stroke-width="2" />
             <!-- Sol (ponto) -->
             <circle id="sun-dot" cx="50" cy="100" r="7" fill="#ffe566">
-              <animate attributeName="r" values="7;9;7" dur="3s" repeatCount="indefinite"/>
-              <animate attributeName="opacity" values="1;.85;1" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="r" values="7;9;7" dur="3s" repeatCount="indefinite" />
+              <animate attributeName="opacity" values="1;.85;1" dur="3s" repeatCount="indefinite" />
             </circle>
           </svg>
           <div class="sun-times">
@@ -271,4 +263,5 @@
 
   <script src="script.js"></script>
 </body>
+
 </html>
