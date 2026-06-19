@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="SolOuChuva?" />
+  <meta name="theme-color" content="#1a1a2e" id="theme-color-meta" />
+  <title>SolOuChuva?</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- CANVAS DE EFEITOS CLIMÁTICOS (partículas) -->
+  <canvas id="weather-canvas" aria-hidden="true"></canvas>
+
+  <!-- EFEITO DE SOL / CLARIDADE (calor) -->
+  <div class="sun-glow" id="sun-glow" aria-hidden="true">
+    <div class="sun-core"></div>
+    <div class="sun-rays"></div>
+  </div>
+
+  <div class="app-wrapper">
+
+    <!-- HEADER -->
+    <header class="app-header">
+      <h1 class="app-title">SolOuChuva<span class="interrogacao">?</span></h1>
+      <p class="subtitle">Descubra o tempo em qualquer cidade</p>
+      <span class="night-badge" id="night-badge">🌙 Modo noturno ativo</span>
+      <span class="cache-badge hidden" id="cache-badge">📦 Dados salvos • sem internet</span>
+      <button class="notif-btn hidden" id="notif-btn" aria-label="Ativar notificações climáticas">
+        🔔 Ativar alertas de clima
+      </button>
+    </header>
+
+    <!-- BUSCA COM AUTOCOMPLETE -->
+    <div class="search-wrapper">
+      <div class="search-box" id="search-box">
+        <input
+          type="text"
+          id="city-input"
+          placeholder="Ex: Barueri, São Paulo..."
+          autocomplete="off"
+          spellcheck="false"
+          inputmode="text"
+          enterkeyhint="search"
+          aria-label="Nome da cidade"
+          aria-autocomplete="list"
+          aria-controls="autocomplete-list"
+          aria-haspopup="listbox"
+          role="combobox"
+          aria-expanded="false"
+        />
+        <!-- Ícone de estado do input (validação visual) -->
+        <span class="input-status" id="input-status" aria-hidden="true"></span>
+        <button id="search-btn" aria-label="Buscar clima">
+          <span id="btn-icon">🔍</span>
+        </button>
+      </div>
+
+      <!-- Mensagem de validação inline -->
+      <p class="input-hint" id="input-hint" aria-live="polite"></p>
+
+      <!-- DROPDOWN DE AUTOCOMPLETE -->
+      <ul
+        class="autocomplete-list hidden"
+        id="autocomplete-list"
+        role="listbox"
+        aria-label="Sugestões de cidades"
+      ></ul>
+    </div>
+
+    <!-- BOTÃO DE GEOLOCALIZAÇÃO -->
+    <button class="geo-btn" id="geo-btn">
+      📍 Usar minha localização atual
+    </button>
+
+    <!-- HISTÓRICO DE BUSCA -->
+    <div class="history-box hidden" id="history-box">
+      <p class="history-label">🕐 Buscas recentes</p>
+      <div class="history-tags" id="history-tags"></div>
+    </div>
+
+    <!-- ERRO -->
+    <div class="error-msg hidden" id="error-msg">
+      <span>😕</span> <span id="error-text">Cidade não encontrada.</span>
+    </div>
+
+    <!-- LOADING SPINNER -->
+    <div class="loading hidden" id="loading">
+      <div class="spinner-ring">
+        <div></div><div></div><div></div><div></div>
+      </div>
+      <p class="loading-text" id="loading-text">Buscando dados do clima<span class="dots"></span></p>
+    </div>
+
+    <!-- CARD PRINCIPAL -->
+    <div class="weather-card hidden" id="weather-card">
+
+      <div class="card-header">
+        <h2 id="city-name">—</h2>
+        <p id="weather-date">—</p>
+        <span class="auto-refresh-badge hidden" id="refresh-badge">🔄 Atualizado agora</span>
+      </div>
+
+      <div class="card-main">
+        <div class="weather-icon" id="weather-icon">—</div>
+        <div class="temp-block">
+          <span class="temp-value" id="temp-value">—</span>
+          <span class="temp-unit">°C</span>
+        </div>
+        <p class="weather-desc" id="weather-desc">—</p>
+        <span class="temp-badge" id="temp-badge">—</span>
+      </div>
+
+      <button class="share-btn" id="share-btn">
+        📤 Compartilhar clima
+      </button>
+
+      <div class="humor-box" id="humor-box">
+        <span id="humor-msg">—</span>
+      </div>
+
+      <div class="look-box">
+        <span class="look-icon" id="look-icon">👕</span>
+        <div class="look-text">
+          <strong>Look do dia</strong>
+          <span id="look-msg">—</span>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-btn" data-target="hourly-section" aria-expanded="false">
+          <span>⏰ Próximas horas</span>
+          <span class="chevron">▼</span>
+        </button>
+        <div class="collapsible-body" id="hourly-section">
+          <div class="hourly-scroll" id="hourly-scroll"></div>
+        </div>
+      </div>
+
+      <div class="collapsible">
+        <button class="collapsible-btn" data-target="weekly-section" aria-expanded="false">
+          <span>📅 Próximos 7 dias</span>
+          <span class="chevron">▼</span>
+        </button>
+        <div class="collapsible-body" id="weekly-section">
+          <div class="weekly-grid" id="weekly-grid"></div>
+        </div>
+      </div>
+
+      <div class="details-grid">
+        <div class="detail-item">
+          <span class="detail-icon">🌡️</span>
+          <span class="detail-label">Sensação</span>
+          <span class="detail-value" id="feels-like">—</span>
+          <span class="detail-tip" id="feels-tip">—</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-icon">💧</span>
+          <span class="detail-label">Umidade</span>
+          <span class="detail-value" id="humidity">—</span>
+          <span class="detail-tip" id="humidity-tip">—</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-icon">💨</span>
+          <span class="detail-label">Vento</span>
+          <span class="detail-value" id="wind-speed">—</span>
+          <span class="detail-tip" id="wind-beaufort">—</span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-icon">☔</span>
+          <span class="detail-label">Chuva (1h)</span>
+          <span class="detail-value" id="rain">—</span>
+          <span class="detail-tip"></span>
+        </div>
+        <div class="detail-item">
+          <span class="detail-icon">👁️</span>
+          <span class="detail-label">Visibilidade</span>
+          <span class="detail-value" id="visibility">—</span>
+          <span class="detail-tip"></span>
+        </div>
+        <div class="detail-item uv-item" id="uv-item">
+          <span class="detail-icon">🔆</span>
+          <span class="detail-label">UV Index</span>
+          <span class="detail-value" id="uv-index">—</span>
+          <span class="detail-tip uv-tip" id="uv-tip">—</span>
+        </div>
+      </div>
+
+      <!-- PREVISÃO DE CHUVA 8h -->
+      <div class="section-card" id="rain-section">
+        <p class="section-title">☔ Probabilidade de Chuva — Próximas 8h</p>
+        <div class="rain-forecast" id="rain-forecast"></div>
+      </div>
+
+      <!-- GRÁFICO DE TEMPERATURA 24h -->
+      <div class="section-card" id="chart-section">
+        <p class="section-title">🌡️ Temperatura — Próximas 24h</p>
+        <svg id="temp-chart-svg" class="temp-chart" viewBox="0 0 320 90"
+             xmlns="http://www.w3.org/2000/svg" aria-label="Gráfico de temperatura 24h"></svg>
+      </div>
+
+      <!-- ARCO NASCER / PÔR DO SOL -->
+      <div class="section-card sun-arc-card" id="sun-arc-section">
+        <p class="section-title">🌅 Nascer &amp; Pôr do Sol</p>
+        <div class="sun-arc-wrap">
+          <svg id="sun-arc-svg" viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg" aria-label="Arco solar">
+            <!-- Linha de horizonte -->
+            <line x1="50" y1="100" x2="230" y2="100" stroke="rgba(255,255,255,.15)" stroke-width="1"/>
+            <!-- Arco de fundo -->
+            <path d="M 50 100 A 90 90 0 0 1 230 100" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="2" stroke-dasharray="4 4"/>
+            <!-- Trilha percorrida -->
+            <path id="sun-trail" fill="none" stroke="#ffb300" stroke-width="2.5" stroke-linecap="round" style="opacity:0; transition: opacity .5s"/>
+            <!-- Arco principal (preenchido pelo JS) -->
+            <path id="sun-arc" fill="none" stroke="rgba(255,220,80,.3)" stroke-width="2"/>
+            <!-- Sol (ponto) -->
+            <circle id="sun-dot" cx="50" cy="100" r="7" fill="#ffe566">
+              <animate attributeName="r" values="7;9;7" dur="3s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="1;.85;1" dur="3s" repeatCount="indefinite"/>
+            </circle>
+          </svg>
+          <div class="sun-times">
+            <span id="sunrise-time">🌅 —</span>
+            <span id="sunset-time">🌇 —</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD DE VENTO (Rosa dos ventos animada) -->
+      <div class="wind-card" id="wind-card">
+        <div class="wind-card-left">
+          <div class="wind-compass" id="wind-compass" aria-label="Rosa dos ventos">
+            <!-- Marcações cardeais -->
+            <span class="compass-n">N</span>
+            <span class="compass-s">S</span>
+            <span class="compass-e">L</span>
+            <span class="compass-w">O</span>
+            <!-- Seta giratória -->
+            <div class="compass-needle" id="compass-needle">
+              <div class="needle-head"></div>
+              <div class="needle-tail"></div>
+            </div>
+            <!-- Círculo interno -->
+            <div class="compass-center"></div>
+          </div>
+        </div>
+        <div class="wind-card-right">
+          <p class="wind-card-label">💨 Vento</p>
+          <p class="wind-speed-big" id="wind-speed-big">— <span>km/h</span></p>
+          <p class="wind-direction-text" id="wind-direction-text">—</p>
+          <p class="wind-beaufort-text" id="wind-beaufort-text">—</p>
+          <!-- Barra de intensidade -->
+          <div class="wind-bar-track">
+            <div class="wind-bar-fill" id="wind-bar-fill"></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer class="app-footer">
+      Dados por <a href="https://open-meteo.com" target="_blank" rel="noopener">Open-Meteo</a>
+      &nbsp;•&nbsp; Gratuito &amp; sem API key
+    </footer>
+
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
